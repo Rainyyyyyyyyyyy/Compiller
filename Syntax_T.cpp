@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <queue>
+#include <stack>
 using namespace std;
 class leksema {
     int l_type;         // номер лексеммы
@@ -209,22 +210,22 @@ Z:
     return res;
 };
 
-struct G {
-    bool is_terminal = false;
-    std::string name = "";   // если нетерминал, то здесь будет название нетерминала
+struct Gramar_stack_element {
+    int leks_number = 0;        // номер лексеммы (если лексемма)
+    /* leks_number<0    <->    не лексемма, а нетерминал     */
+    char name = 0;           // название нетерминала
+
+    Gramar_stack_element(int n, char nam) {
+        leks_number = n;
+        name = nam;
+    }
+
+
 };
 
 
-struct stack {                      // магазин синтаксического анализатора
-    stack *next = NULL;
-    G data;
-};
 
-struct opc_stack {                  // магазин генератора ОПС
-    opc_stack *next = NULL;
-    string data;
-};
-
+/*
 void stack_pop(stack* head) {
     if (head->next == NULL) {
         delete head; head = NULL;
@@ -235,7 +236,7 @@ void stack_pop(stack* head) {
     head = t;
 }
 
-
+*/
 /*
 * program_file - файл с проверяемой программов
 * str_number - номер строки
@@ -247,103 +248,120 @@ void stack_pop(stack* head) {
 */
 
 
-void imply_Grammar(std::ifstream &program_file, int &str_number, int &str_position, int &error_flag, stack* g_stack, opc_stack* gen_opc, opc_stack *opc, G* t_not_list) {
-    if (g_stack->data.is_terminal == false){
-        if (g_stack->data.name == "X"){
+/*
+opc_stack* generate_part_of_opc_for_gen(std::vector<int> seq) {
+    if (seq.size() == 0)return NULL;
+    opc_stack* head = new opc_stack;
+    int i = 0;  // i<seq.size()
+    opc_stack* t;
+    while (i < seq.size()){
+        t = new opc_stack;
+        t->next = head;
+        head = t;
+        switch (seq[i]) {
+        case 0: head->data = "."; break;
+        case 1: head->data = "k"; break;
+        case 2: head->data = "a"; break;
+        case 3: head->data = "+"; break;
+        case 4: head->data = "-"; break;
+        case 5: head->data = "*"; break;
+        case 6: head->data = "/"; break;
+        case 7: head->data = "("; break;
+        case 8: head->data = ")"; break;
+        case 9: head->data = "="; break;
+        case 10: head->data = "=="; break;
+        case 11: head->data = ">"; break;
+        case 12: head->data = "<"; break;
+        case 13: head->data = ">="; break;
+        case 14: head->data = "<="; break;
+        case 15: head->data = "r"; break;
+        case 16: head->data = "w"; break;
+        case 17: head->data = "1"; break;
+        case 18: head->data = "2"; break;
+        case 19: head->data = "3"; break;
+        case 20: head->data = "4"; break;
+        case 21: head->data = "5"; break;
+        case 22: head->data = "6"; break;
+        case 23: head->data = "7"; break;
+        case 24: head->data = "8"; break;
+        case 25: head->data = "9"; break;
+        case 26: head->data = "10"; break;
+        case 27: head->data = "11"; break;
+        }
+        i++;
+    }
+    return head;
+}
+*/
+                                                                                                                                                                  // массив, НЕ СТЕК              
+void imply_Grammar(std::ifstream &program_file, int &str_number, int &str_position, int &error_flag, stack<Gramar_stack_element> g_stack, stack <string> gen_opc,  Gramar_stack_element* t_not_list) {
+    if (g_stack.top().leks_number<0){   //is_terminal == false
+        if (g_stack.top().name == 'X') { // neterm = "X"
             leksema input_leks = 
                 Lexical_tokenizator(program_file, str_number, str_position, error_flag);
-            if (input_leks.get_l_type() == 2){  // X -> aH=SZ; PZ   |   a...=..9    | '.' - пусто квадратик
-                stack* temp = new stack;
-                temp->next = g_stack;
-                g_stack = temp;
-                temp->data = t_not_list[39];    // Z
-                //
-                stack* temp = new stack;
-                temp->next = g_stack;
-                g_stack = temp;
-                temp->data = t_not_list[31];    // P
-                //
-                stack* temp = new stack;
-                temp->next = g_stack;
-                g_stack = temp;
-                temp->data = t_not_list[24];    // ;
-                //
-                stack* temp = new stack;
-                temp->next = g_stack;
-                g_stack = temp;
-                temp->data = t_not_list[39];    // Z
-                //
-                stack* temp = new stack;
-                temp->next = g_stack;
-                g_stack = temp;
-                temp->data = t_not_list[32];    // S
-                //
-                stack* temp = new stack;
-                temp->next = g_stack;
-                g_stack = temp;
-                temp->data = t_not_list[9];     // =
-                //
-                stack* temp = new stack;
-                temp->next = g_stack;
-                g_stack = temp;
-                temp->data = t_not_list[38];    // H
-                //
-                stack* temp = new stack;
-                temp->next = g_stack;
-                g_stack = temp;
-                temp->data = t_not_list[2];    // a
-                //
-                //
-                // semantic action for opc's generator:    a...=..9
-                opc_stack *ttemp = new opc_stack;
-                ttemp->next = gen_opc;
-                gen_opc = ttemp;
-                ttemp->data = "9";
-                //
-                opc_stack* ttemp = new opc_stack;
-                ttemp->next = gen_opc;
-                gen_opc = ttemp;
-                ttemp->data = ".";
-                //
-                opc_stack* ttemp = new opc_stack;
-                ttemp->next = gen_opc;
-                gen_opc = ttemp;
-                ttemp->data = ".";
-                //
-                opc_stack* ttemp = new opc_stack;
-                ttemp->next = gen_opc;
-                gen_opc = ttemp;
-                ttemp->data = "=";
-                //
-                opc_stack* ttemp = new opc_stack;
-                ttemp->next = gen_opc;
-                gen_opc = ttemp;
-                ttemp->data = ".";
-                //
-                opc_stack* ttemp = new opc_stack;
-                ttemp->next = gen_opc;
-                gen_opc = ttemp;
-                ttemp->data = ".";
-                //
-                opc_stack* ttemp = new opc_stack;
-                ttemp->next = gen_opc;
-                gen_opc = ttemp;
-                ttemp->data = ".";
-                //
-                opc_stack* ttemp = new opc_stack;
-                ttemp->next = gen_opc;
-                gen_opc = ttemp;
-                ttemp->data = "a";
-                
+            switch(input_leks.get_l_type()){
+            //if (input_leks.get_l_type() == 2) {  // X -> aH=SZ; PZ   |   a...=..9    | '.' - пустой квадратик
+            case 1: g_stack.pop(); break;       // константа
+            case 2: g_stack.pop();              // переменная
+                Gramar_stack_element t(-39, 'Z');  g_stack.push(t);     // Z
+                t.leks_number = -31; t.name = 'P'; g_stack.push(t);     // P
+                t.leks_number = 24;                g_stack.push(t);     // ;
+                t.leks_number = -39; t.name = 'Z'; g_stack.push(t);     // Z
+                t.leks_number = -32; t.name = 'S'; g_stack.push(t);     // S
+                t.leks_number = 9;                 g_stack.push(t);     // =
+                t.leks_number = -38; t.name = 'H'; g_stack.push(t);     // H
+                t.leks_number = 2; g_stack.push(t);                     // a          
+                break;
+            case 3: g_stack.pop(); break;       // +
+            case 4: g_stack.pop(); break;       // -
+            case 5: g_stack.pop(); break;       // *
+            case 6: g_stack.pop(); break;       // /
+            case 7: g_stack.pop(); break;       // (
+            case 8: g_stack.pop(); break;       // )
+            case 9: g_stack.pop(); break;       // =
+            case 10: g_stack.pop(); break;      // ==
+            case 11: g_stack.pop(); break;      // !=
+            case 12: g_stack.pop(); break;      // >
+            case 13: g_stack.pop(); break;      // <
+            case 14: g_stack.pop(); break;      // >=
+            case 15: g_stack.pop(); break;      // <=
+            case 16: g_stack.pop(); break;      // [
+            case 17: g_stack.pop(); break;      // ]
+            case 18:                            // if               X -> if(C) P endif EZ; PZ   |   ...1...3..9
+                g_stack.pop();
+                Gramar_stack_element t(-39, 'Z');   g_stack.push(t);    // Z
+                t.leks_number = -31; t.name = 'P';  g_stack.push(t);    // P
+                t.leks_number = 24;                 g_stack.push(t);    // ;
+                t.leks_number = -39; t.name = 'Z';  g_stack.push(t);    // Z
+                t.leks_number = -42; t.name = 'E';  g_stack.push(t);    // E
+                t.leks_number = 19;                 g_stack.push(t);    // endif
+                t.leks_number = -31; t.name = 'P';  g_stack.push(t);    // P
+                t.leks_number = 8;                  g_stack.push(t);    // )
+                t.leks_number = -40; t.name = 'C';  g_stack.push(t);    // C
+                t.leks_number = 7;                  g_stack.push(t);    // (
+                t.leks_number = 18;                 g_stack.push(t);    // if
 
 
-            }// // X -> aH=SZ; PZ   |   a...=..9    | '.' - пусто квадратик
+
+            } // X -> aH=SZ; PZ   |   a...=..9    | '.' - пустой квадратик
+
         }
     }
 }
 
 int main()
 {
+  
+
+    stack<int> s;
+    s.push(1);
+    s.push(4);
+    s.push(12);
+    while (!s.empty()) {
+        cout << s.top()<<' ';
+        s.pop();
+    }
+    return 0;
 
     string leksema_list_ST[30] = {"T", "k", "a",
         "+", "-", "*", "/",
@@ -358,7 +376,7 @@ int main()
     string neterms[17] = {
         "X","P","S","U","T","V","F","G","H","Z","C","D","E","R","M","N","O"
     };
-    G terms_and_noterms[47];
+    /*G terms_and_noterms[47];
     for (int i = 0; i < 30; i++) {
         terms_and_noterms[i].is_terminal = true;
         terms_and_noterms[i].name = leksema_list_ST[i];
@@ -374,7 +392,7 @@ int main()
         cout << i<<' '<<terms_and_noterms[i].is_terminal << " - " << terms_and_noterms[i].name << '\n';
     }
     return 0;
-    
+    */
     /*
     SetConsoleCP(1251); // устанавливаем кодировку для ввода\вывода на консоль
     SetConsoleOutputCP(1251);
