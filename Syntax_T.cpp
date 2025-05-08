@@ -364,14 +364,14 @@ void imply_Grammar(std::ifstream &program_file, int &str_number, int &str_positi
                 t.leks_number = 7;                  g_stack.push(t);    // (
                 t.leks_number = 26;                 g_stack.push(t);    // write
             }else
-            if(input_leks.get_l_type()==27){            // leksema = int
+            if(input_leks.get_l_type() == 27){            // leksema = int
                 t.leks_number = -1; t.name = 'Z';   g_stack.push(t);    // Z
                 t.leks_number = -1; t.name = 'P';   g_stack.push(t);    // P
                 t.leks_number = 24;                 g_stack.push(t);    // ;
                 t.leks_number = -1; t.name = 'R';   g_stack.push(t);    // R
                 t.leks_number = 27;                 g_stack.push(t);    // int
             }else
-            if(input_leks.get_l_type()==28){            // leksema = int1
+            if(input_leks.get_l_type() == 28){            // leksema = int1
                 t.leks_number = -1; t.name = 'Z';   g_stack.push(t);    // Z
                 t.leks_number = -1; t.name = 'P';   g_stack.push(t);    // P
                 t.leks_number = 24;                 g_stack.push(t);    // ;
@@ -451,35 +451,37 @@ void imply_Grammar(std::ifstream &program_file, int &str_number, int &str_positi
                  /*  λ   */
              }
              break;
-        case 'S':   
-            g_stack.pop();
+        //
+        //
+        //
+        case 'S':   g_stack.pop();
                     //  S   ->  kVU
             if (input_leks.get_l_type() == 1) {             // leksema = const (k)
                 t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // U
-                t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // V
+                t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
                 t.leks_number = 1;                  g_stack.push(t);    // k
             }else   //  S   ->  aHVU
             if(input_leks.get_l_type() == 2) {              // leksema = a
                 t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // U
-                t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // V
+                t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
                 t.leks_number = -1; t.name = 'H';   g_stack.push(t);    // H
                 t.leks_number = 2;                  g_stack.push(t);    // a
             }else   //  S   ->  +GVU
             if (input_leks.get_l_type() == 3) {             // leksema = +
                 t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // U
-                t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // V
+                t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
                 t.leks_number = -1; t.name = 'G';   g_stack.push(t);    // G
                 t.leks_number = 3;                  g_stack.push(t);    // +
             }else   // S    ->  -GVU
             if (input_leks.get_l_type() == 4) {             // leksema = -
                 t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // U
-                t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // V
+                t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
                 t.leks_number = -1; t.name = 'G';   g_stack.push(t);    // G
-                t.leks_number = 4;                  g_stack.push(t);    // +
+                t.leks_number = 4;                  g_stack.push(t);    // -
             }else   // S    ->  (S)VU
             if (input_leks.get_l_type() == 7) {             // leksema = (
                 t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // U
-                t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // V
+                t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
                 t.leks_number = 8;                  g_stack.push(t);    // )
                 t.leks_number = -1; t.name = 'S';   g_stack.push(t);    // S
                 t.leks_number = 7;                  g_stack.push(t);    // (
@@ -488,7 +490,187 @@ void imply_Grammar(std::ifstream &program_file, int &str_number, int &str_positi
                 /* error */
                 Grammar_work_error_flag = 1;    // пусть будет 1 пока что
             }
+        //
+        //
+        //
+        case 'U': g_stack.pop();
+            if (input_leks.get_l_type() == 3) {             // leksema = +
+                t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // U
+                t.leks_number = -1; t.name = 'T';   g_stack.push(t);    // T
+                t.leks_number = 3;                  g_stack.push(t);    // +
+            }else
+            if (input_leks.get_l_type() == 4) {             // leksema = -
+                t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // U
+                t.leks_number = -1; t.name = 'T';   g_stack.push(t);    // T
+                t.leks_number = 4;                  g_stack.push(t);    // -
+            }
+            else {
+                /*  λ   */
+            }
+        //
+        //
+        //
+        case 'T':   g_stack.pop();
+            if (input_leks.get_l_type() == 1) {             // leksema = const (k)
+                t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
+                t.leks_number = 1;                  g_stack.push(t);    // k
+            }else       //  T   ->  aHV
+            if (input_leks.get_l_type() == 2) {              // leksema = a
+                t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
+                t.leks_number = -1; t.name = 'H';   g_stack.push(t);    // H
+                t.leks_number = 2;                  g_stack.push(t);    // a
+                }else       //  T   ->  +GV
+            if (input_leks.get_l_type() == 3) {             // leksema = +
+                t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
+                t.leks_number = -1; t.name = 'G';   g_stack.push(t);    // G
+                t.leks_number = 3;                  g_stack.push(t);    // +
+            }else       //  T   ->  -GV
+            if (input_leks.get_l_type() == 4) {             // leksema = -
+                t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
+                t.leks_number = -1; t.name = 'G';   g_stack.push(t);    // G
+                t.leks_number = 4;                  g_stack.push(t);    // -
+            }else
+            if (input_leks.get_l_type() == 7) {             // leksema = (
+                t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
+                t.leks_number = 8;                  g_stack.push(t);    // )
+                t.leks_number = -1; t.name = 'S';   g_stack.push(t);    // S
+                t.leks_number = 7;                  g_stack.push(t);    // (
+            }
+            else {
+                /* error */
+                Grammar_work_error_flag = 1;
+            }
+            //
+            //
+            //
+        case 'V':   g_stack.pop();
+            if (input_leks.get_l_type() == 5) {             // leksema = *
+                t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
+                t.leks_number = -1; t.name = 'F';   g_stack.push(t);    // F
+                t.leks_number = 5;                  g_stack.push(t);    // *
+            }else
+            if (input_leks.get_l_type() == 6) {             // leksema = /
+                t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
+                t.leks_number = -1; t.name = 'F';   g_stack.push(t);    // F
+                t.leks_number = 6;                  g_stack.push(t);    // /
+            }
+            else {
+                /*  λ   */
+            } break;
+            //
+            //
+            //
+        case 'F':   g_stack.pop();
+            if (input_leks.get_l_type() == 1) {             // leksema = k
+                t.leks_number = 1;                  g_stack.push(t);    // k
+            }else
+            if (input_leks.get_l_type() == 2) {             // leksema = a
+                t.leks_number = -1; t.name = 'H';   g_stack.push(t);    // H
+                t.leks_number = 2;                  g_stack.push(t);    // a
+            }else
+            if (input_leks.get_l_type() == 3) {             // leksema = +
+                t.leks_number = -1; t.name = 'G';   g_stack.push(t);    // G
+                t.leks_number = 3;                  g_stack.push(t);    // +
+            }else
+            if (input_leks.get_l_type() == 4) {             // leksema = +
+                t.leks_number = -1; t.name = 'Z';   g_stack.push(t);    // Z
+                t.leks_number = -1; t.name = 'G';   g_stack.push(t);    // G
+                t.leks_number = 4;                  g_stack.push(t);    // -
+            }else
+            if(input_leks.get_l_type() == 7){               // leksemma = (
+                t.leks_number = 8;                  g_stack.push(t);    // )
+                t.leks_number = -1; t.name = 'S';   g_stack.push(t);    // S
+                t.leks_number = 7;                  g_stack.push(t);    // (
+            }
+            else {
+                /*  error   */
+                Grammar_work_error_flag = 1;
+            } break;
+            //
+            //
+            //
+        case 'G':   g_stack.pop();
+            if (input_leks.get_l_type() == 1) {             // leksema = k
+                t.leks_number = 1;                  g_stack.push(t);    // k
+            }else
+            if(input_leks.get_l_type() == 2){               // leksema = a
+                t.leks_number = -1; t.name = 'H';   g_stack.push(t);    // H
+                t.leks_number = 2;                  g_stack.push(t);    // a
+            }else
+            if(input_leks.get_l_type() == 7){               // leksema = (
+                t.leks_number = 8;                  g_stack.push(t);    // )
+                t.leks_number = -1; t.name = 'S';   g_stack.push(t);    // S
+                t.leks_number = 7;                  g_stack.push(t);    // (
+            }
+            else {
+                /*  error   */
+                Grammar_work_error_flag = 1;
+            } break;
+            //
+            //
+            //
+        case 'H':   g_stack.pop();
+            if (input_leks.get_l_type() == 16) {            // leksema = [
+                t.leks_number = 17;                 g_stack.push(t);    // )
+                t.leks_number = -1; t.name = 'S';   g_stack.push(t);    // S
+                t.leks_number = 16;                 g_stack.push(t);    // (
+            }
+            else {
+                /*  λ   */
+            } break;
+            //
+            //
+            //
+        case 'Z':   g_stack.pop();
+            /*  λ   */
+            break;
+            //
+            //
+            //
+        case 'C':
+            if (input_leks.get_l_type() == 1) {             // leksema = k
+                t.leks_number = -1; t.name = 'D';   g_stack.push(t);    // D
+                t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // U
+                t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
+                t.leks_number = 1;                  g_stack.push(t);    // k
+            }else
+            if (input_leks.get_l_type() == 2) {              // leksema = a
+                t.leks_number = -1; t.name = 'D';   g_stack.push(t);    // D
+                t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // U
+                t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
+                t.leks_number = -1; t.name = 'H';   g_stack.push(t);    // H
+                t.leks_number = 2;                  g_stack.push(t);    // a
+            }else   //  S   ->  +GVU
+            if (input_leks.get_l_type() == 3) {             // leksema = +
+                t.leks_number = -1; t.name = 'D';   g_stack.push(t);    // D
+                t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // U
+                t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
+                t.leks_number = -1; t.name = 'G';   g_stack.push(t);    // G
+                t.leks_number = 3;                  g_stack.push(t);    // +
+            }else   // S    ->  -GVU
+            if (input_leks.get_l_type() == 4) {             // leksema = -
+                t.leks_number = -1; t.name = 'D';   g_stack.push(t);    // D
+                t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // U
+                t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
+                t.leks_number = -1; t.name = 'G';   g_stack.push(t);    // G
+                t.leks_number = 4;                  g_stack.push(t);    // -
+            }else   // S    ->  (S)VU
+            if (input_leks.get_l_type() == 7) {             // leksema = (
+                t.leks_number = -1; t.name = 'D';   g_stack.push(t);    // D
+                t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // U
+                t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
+                t.leks_number = 8;                  g_stack.push(t);    // )
+                t.leks_number = -1; t.name = 'S';   g_stack.push(t);    // S
+                t.leks_number = 7;                  g_stack.push(t);    // (
+            }
+            else {
+                /* error */
+                Grammar_work_error_flag = 1;    // пусть будет 1 пока что
+            } break;
+        case 'D':
+
         }
+
     }
 
     /*leksema input_leks =
