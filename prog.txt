@@ -1,0 +1,16 @@
+int n, i;
+read(n);
+int1 m[n];
+i = 0;
+while(i < n) read(m[i]); i = i - 1; endwhile;
+int t, tt, end;
+end = n;
+while(end > 1) i = 1; t = m[0]; 
+ while(i < end) 
+  if(m[i] > t) tt = m[i]; m[i-1] = t; t = tt; endif 
+  else m[i-1] = m[i]; 
+  endelse; i = i + 1; 
+ endwhile; m[i-1] = t; end = end - 1; 
+endwhile;
+i = 0;
+while(i < n) write(m[i]); i = i + 1; endwhile;
