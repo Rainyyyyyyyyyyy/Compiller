@@ -103,7 +103,7 @@ leksema Lexical_tokenizator(std::ifstream& program_file, int& str_number, int& s
     std::string a = "+-*/()[];,";
     std::string a1 = "><";
     std::vector<int> b = { 3,4,5,6,7,8,16,17,24,29 }; // номера лексем из a
-    std::vector<std::string> function_words_a{ "if", "endif", "else", "endelse", "while", "endwihle", "read", "write", "int", "int1" }; // служебные слова
+    std::vector<std::string> function_words_a{ "if", "endif", "else", "endelse", "while", "endwhile", "read", "write", "int", "int1" }; // служебные слова
     std::vector<int> function_words_b = { 18,19,20,21,22,23,25,26,27,28 }; // номера лексем служебных слов из function_words_a
     std::vector<std::string>::iterator is_fw;
     leksema res;
@@ -343,6 +343,7 @@ string int_to_str(int n) {
         s = (char)(n % 10) + s;
         n = n / 10;
     }
+    return s;
 }
 void imply_one_operation_from_gen_opc(stack<int>& gen_opc, leksema leks, stack<string>& opc) {
     int gen_top = gen_opc.top();
@@ -408,7 +409,7 @@ void imply_Grammar(std::ifstream& program_file, bool &error_flag) {
                     t.leks_number = 9;                  g_stack.push(t);    // =
                     t.leks_number = -1; t.name = 'H';   g_stack.push(t);    // H
                     t.leks_number = 2;                  g_stack.push(t);    // a          
-                
+
                     gen_opc_stack.push(27);                                 // 9
                     gen_opc_stack.push(0);                                  // □
                     gen_opc_stack.push(0);                                  // □
@@ -417,7 +418,7 @@ void imply_Grammar(std::ifstream& program_file, bool &error_flag) {
                     gen_opc_stack.push(0);                                  // □
                     gen_opc_stack.push(0);                                  // □
                     gen_opc_stack.push(12);                                 // a
-                }
+                } 
                 else
                     if (input_leks.get_l_type() == 18) {        // leksema = if
                         t.leks_number = -1; t.name = 'Z';   g_stack.push(t);    // Z
@@ -451,7 +452,7 @@ void imply_Grammar(std::ifstream& program_file, bool &error_flag) {
                             t.leks_number = 24;                 g_stack.push(t);    // ;
                             t.leks_number = -1; t.name = 'Z';   g_stack.push(t);    // Z
                             t.leks_number = 23;                 g_stack.push(t);    // endwhile
-                            t.leks_number = -1; t.name = 'p';   g_stack.push(t);    // P
+                            t.leks_number = -1; t.name = 'P';   g_stack.push(t);    // P
                             t.leks_number = 8;                  g_stack.push(t);    // )
                             t.leks_number = -1; t.name = 'C';   g_stack.push(t);    // C
                             t.leks_number = 7;                  g_stack.push(t);    // (
@@ -594,7 +595,7 @@ void imply_Grammar(std::ifstream& program_file, bool &error_flag) {
                             t.leks_number = 24;                 g_stack.push(t);    // ;
                             t.leks_number = -1; t.name = 'Z';   g_stack.push(t);    // Z
                             t.leks_number = 23;                 g_stack.push(t);    // endwhile
-                            t.leks_number = -1; t.name = 'p';   g_stack.push(t);    // P
+                            t.leks_number = -1; t.name = 'P';   g_stack.push(t);    // P
                             t.leks_number = 8;                  g_stack.push(t);    // )
                             t.leks_number = -1; t.name = 'C';   g_stack.push(t);    // C
                             t.leks_number = 7;                  g_stack.push(t);    // (
@@ -745,6 +746,7 @@ void imply_Grammar(std::ifstream& program_file, bool &error_flag) {
                 //
                 //
                 //
+                break;
             case 'U':
                 if (input_leks.get_l_type() == 3) {             // leksema = +
                     t.leks_number = -1; t.name = 'U';   g_stack.push(t);    // U
@@ -772,6 +774,7 @@ void imply_Grammar(std::ifstream& program_file, bool &error_flag) {
                 //
                 //
                 //
+                break;
             case 'T':  
                 if (input_leks.get_l_type() == 1) {             // leksema = const (k)
                     t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
@@ -831,6 +834,7 @@ void imply_Grammar(std::ifstream& program_file, bool &error_flag) {
                 //
                 //
                 //
+                break;
             case 'V':  
                 if (input_leks.get_l_type() == 5) {             // leksema = *
                     t.leks_number = -1; t.name = 'V';   g_stack.push(t);    // V
@@ -944,9 +948,9 @@ void imply_Grammar(std::ifstream& program_file, bool &error_flag) {
                 //
             case 'H':  
                 if (input_leks.get_l_type() == 16) {            // leksema = [
-                    t.leks_number = 17;                 g_stack.push(t);    // )
+                    t.leks_number = 17;                 g_stack.push(t);    // ]
                     t.leks_number = -1; t.name = 'S';   g_stack.push(t);    // S
-                    t.leks_number = 16;                 g_stack.push(t);    // (
+                    t.leks_number = 16;                 g_stack.push(t);    // [
                     
 
                     gen_opc_stack.push(18);   // i
@@ -1209,6 +1213,7 @@ void imply_Grammar(std::ifstream& program_file, bool &error_flag) {
                 //return;
             }
             else {
+                if (input_leks.get_l_type() == 0)end_of_program_flag = true;
                 ready_to_read_next_leksem = true;
             }
 
