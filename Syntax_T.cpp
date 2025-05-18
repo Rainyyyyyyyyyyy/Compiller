@@ -1529,7 +1529,7 @@ int main()
 {
     SetConsoleCP(1251); // устанавливаем кодировку для ввода\вывода на консоль
     SetConsoleOutputCP(1251);
-    std::ifstream program_file("prog.txt"); // программа пишется в файле
+    std::ifstream program_file("prog2.txt"); // программа пишется в файле
     if (!program_file.is_open()) { return 0; }
     bool error_flag = false;
     Var_table.reserve(SHRT_MAX);
@@ -1543,19 +1543,19 @@ int main()
             {
             case 0:
                 //std::cout << "Операция:\t\t" << OPC[i].value << std::endl;
-                std::cout << "Операция:\t\t" << OPC_operation_list[OPC[i].value - 1] << std::endl;
+                std::cout << i<<"\tОперация:\t\t" << OPC_operation_list[OPC[i].value - 1] << std::endl;
                 break;
             case 1:
-                std::cout << "Константа / метка:\t" << OPC[i].value << std::endl;
+                std::cout << i<<"\tКонстанта / метка:\t" << OPC[i].value << std::endl;
                 break;
             case 2:
-                std::cout << "Переменная:\t\t" << *(std::string*)((long long)OPC[i].a - sizeof(std::string)) << std::endl;
+                std::cout << i<<"\tПеременная:\t\t" << *(std::string*)((long long)OPC[i].a - sizeof(std::string)) << std::endl;
                 ////std::cout << "Переменная:\t\t" << OPC[i].a << std::endl;
                 ///----------std::cout << "Переменная:\t\t" << (int)&Var_table[0].name << "\t" << (int)OPC[i].a << "\t" << sizeof(std::string) << std::endl;
                 //std::cout << "Переменная:\t\t" << &Var_table[0].name << "\t" << (std::string*)((long long)OPC[i].a - sizeof(std::string)) << std::endl;
                 break;
             case 3:
-                std::cout << "Массив:\t\t\t" << *(std::string*)((long long)OPC[i].m - sizeof(std::string)) << std::endl;
+                std::cout << i<<"\tМассив:\t\t\t" << *(std::string*)((long long)OPC[i].m - sizeof(std::string)) << std::endl;
                 //std::cout << "Массив:\t\t\t" << OPC[i].m << '\t'<<std::endl;
                 break;
             default:
